@@ -7,10 +7,15 @@ import com.terrasystem.user_shop_service.DTO.LineItemRequest;
 import com.terrasystem.user_shop_service.DTO.PlaceOrderRequest;
 import com.terrasystem.user_shop_service.Repository.ItemRepository;
 import com.terrasystem.user_shop_service.Repository.OrderRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -33,6 +38,7 @@ public class OrderService {
         }
 
         Order order = new Order();
+        order.setOrderDate(LocalDateTime.now());
         order.setUserId(userId);
         order.setStatus("NEW");
 
@@ -85,4 +91,27 @@ public class OrderService {
         return orderRepository.findById(saved.getId())
                 .orElseThrow(() -> new IllegalStateException("Saved order not found: " + saved.getId()));
     }
+
+    @Transactional(readOnly = true)
+    public Order getOrderForUser(Integer orderId, Integer userId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Order not found"
+                ));
+
+        if (!order.getUserId().equals(userId)) {
+            throw new ResponseStatusException(
+                    HttpStatus.FORBIDDEN, "Access denied"
+            );
+        }
+
+        return order;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Order> getOrdersForUser(Integer userId) {
+        return orderRepository.findByUserId(userId);
+    }
+
+
 }

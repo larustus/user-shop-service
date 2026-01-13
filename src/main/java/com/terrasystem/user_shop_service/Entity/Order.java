@@ -30,7 +30,7 @@ public class Order {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "order_date", nullable = false, insertable = false, updatable = false)
+    @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
     @Column(name = "user_id", nullable = false)

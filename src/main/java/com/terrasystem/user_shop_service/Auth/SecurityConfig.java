@@ -29,11 +29,11 @@ public class SecurityConfig {
             .cors(cors -> {})
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            // Wyłączamy mechanizmy "loginowe" Spring Security
+            // Mehcanizmy logowania wyłączone
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable())
 
-            // Minimalny zestaw nagłówków (bez ryzyka dla frontu)
+            // Nagłówki
             .headers(h -> h
                 .frameOptions(f -> f.deny())
                 .contentTypeOptions(c -> {}) // X-Content-Type-Options: nosniff
@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/items/*/comments/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/items/*/comments/**").authenticated()
 
-                // zamknij wszystko inne (ważne!)
+                
                 .anyRequest().denyAll()
             );
 

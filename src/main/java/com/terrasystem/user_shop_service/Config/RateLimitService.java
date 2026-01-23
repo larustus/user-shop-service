@@ -16,7 +16,6 @@ public class RateLimitService {
     private final Map<String, Bucket> ipBuckets = new ConcurrentHashMap<>();
     private final Map<String, Bucket> userBuckets = new ConcurrentHashMap<>();
 
-    // Ustawienia (proste i sensowne na start)
     // IP: 20 prób / minuta
     // USER: 10 prób / minuta (na konkretny username)
     private Bucket newIpBucket() {

@@ -59,7 +59,7 @@ public class ApiExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleRse(ResponseStatusException ex) {
         int status = ex.getStatusCode().value();
 
-        // ujednolicenie dla 401 (nie zdradzamy nic więcej)
+        // ujednolicenie dla 401
         String message = (status == 401) ? "Invalid username or password"
                 : (ex.getReason() == null ? "Request failed" : ex.getReason());
 

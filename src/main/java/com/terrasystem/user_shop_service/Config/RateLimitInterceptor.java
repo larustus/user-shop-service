@@ -26,7 +26,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        // Limitujemy tylko konkretne endpointy
+        // Limit na konkretne endpointy
         boolean isLogin = method.equals("POST") && path.equals("/auth/login");
         boolean isRegister = method.equals("POST") && path.equals("/auth/register");
 
@@ -34,9 +34,7 @@ public class RateLimitInterceptor implements HandlerInterceptor {
 
         String ip = extractClientIp(request);
 
-        // Wyciągamy username z body JSON (dla login i register)
-        // Uwaga: request body można odczytać raz — dlatego najlepiej dodać ContentCachingRequestWrapper
-        // My zrobimy to poprawnie w kroku 4.3 (WebConfig).
+        
         String body = (String) request.getAttribute("CACHED_REQUEST_BODY");
         String username = null;
 
@@ -46,22 +44,21 @@ public class RateLimitInterceptor implements HandlerInterceptor {
                 Object u = json.get("username");
                 if (u != null) username = String.valueOf(u);
             } catch (Exception ignored) {
-                // jak body nie jest JSON, to i tak ograniczymy per IP
+                
             }
         }
 
-        // osobne limity można dać dla register (często ostrzejsze)
-        // na start używamy tej samej funkcji
+        
         rateLimitService.consumeLoginAttempt(ip, username);
 
         return true;
     }
 
     private String extractClientIp(HttpServletRequest request) {
-        // Jeśli kiedyś postawisz reverse proxy (nginx/traefik), to bierzemy X-Forwarded-For
+       
         String xff = request.getHeader("X-Forwarded-For");
         if (xff != null && !xff.isBlank()) {
-            // pierwszy adres = klient
+            
             return xff.split(",")[0].trim();
         }
         return request.getRemoteAddr();

@@ -32,7 +32,7 @@ public class JWTService {
         Instant exp = now.plusSeconds(expirationSeconds);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId)) // sub = userId (standard)
+                .setSubject(String.valueOf(userId)) // sub = userId
                 .claim("role", role)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(exp))

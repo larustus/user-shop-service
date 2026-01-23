@@ -20,10 +20,6 @@ public class CachedBodyFilter extends OncePerRequestFilter {
 
         ContentCachingRequestWrapper wrapped = new ContentCachingRequestWrapper(request);
 
-        // Przepuszczamy dalej — ale interceptor wykona się przed kontrolerem,
-        // więc body musi być dostępne już teraz. W ContentCachingRequestWrapper
-        // bufor zapełni się po odczycie, więc interceptor nadal może nie zobaczyć.
-        // Dlatego w interceptorze, jeśli brak atrybutu, zrobimy fallback: nic, tylko IP.
         filterChain.doFilter(wrapped, response);
     }
 }

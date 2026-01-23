@@ -29,12 +29,10 @@ public class CommentController {
                        @Valid @RequestBody CreateCommentRequest req,
                        Authentication auth) {
 
-        // Zakładam, że w JWTAuthFilter ustawiasz principal/Authentication z userId + role.
-        // Przykładowo: auth.getName() może być userId (String).
+
         Integer userId = Integer.valueOf(auth.getName());
 
-        // Jeśli w auth trzymasz też username jako claim/attribute, pobierz.
-        // Minimalnie możesz tu wstawić stałe "user" albo później rozbudować.
+
         String username = "user-" + userId;
 
         return service.add(itemId, userId, username, req);
